@@ -15,10 +15,10 @@ AnimatorStateTransition:
     m_ConditionEvent: MoveY
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: Encerrou
+    m_ConditionEvent: Finished
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: PodeMover
+    m_ConditionEvent: CanMove
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8090613907041089139}
@@ -36,7 +36,7 @@ AnimatorStateTransition:
   m_CanTransitionToSelf: 1
 --- !u!1102 &-8090613907041089139
 AnimatorState:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -76,7 +76,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Hit
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: Encerrou
+    m_ConditionEvent: Finished
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6642922114652730205}
@@ -94,7 +94,7 @@ AnimatorStateTransition:
   m_CanTransitionToSelf: 1
 --- !u!1102 &-6642922114652730205
 AnimatorState:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -137,10 +137,10 @@ AnimatorStateTransition:
     m_ConditionEvent: MoveY
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: Encerrou
+    m_ConditionEvent: Finished
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: PodeMover
+    m_ConditionEvent: CanMove
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8090613907041089139}
@@ -158,7 +158,7 @@ AnimatorStateTransition:
   m_CanTransitionToSelf: 1
 --- !u!1102 &-4856928547867092242
 AnimatorState:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -218,7 +218,7 @@ AnimatorStateTransition:
   m_CanTransitionToSelf: 1
 --- !u!1107 &-2444084226679620469
 AnimatorStateMachine:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -256,7 +256,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Hit
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: Encerrou
+    m_ConditionEvent: Finished
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6642922114652730205}
@@ -290,7 +290,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Hit
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: PodeMover
+    m_ConditionEvent: CanMove
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4856928547867092242}
@@ -312,7 +312,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: jogador_0
+  m_Name: PlayerAnimationController
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: MoveY
@@ -327,13 +327,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Encerrou
+  - m_Name: Finished
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: PodeMover
+  - m_Name: CanMove
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -367,10 +367,10 @@ AnimatorStateTransition:
     m_ConditionEvent: Hit
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: Encerrou
+    m_ConditionEvent: Finished
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: PodeMover
+    m_ConditionEvent: CanMove
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8090613907041089139}
@@ -395,7 +395,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: PodeMover
+    m_ConditionEvent: CanMove
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4856928547867092242}
@@ -420,7 +420,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Encerrou
+    m_ConditionEvent: Finished
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4856928547867092242}
@@ -445,7 +445,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Encerrou
+    m_ConditionEvent: Finished
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4856928547867092242}
@@ -476,10 +476,10 @@ AnimatorStateTransition:
     m_ConditionEvent: Hit
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: Encerrou
+    m_ConditionEvent: Finished
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: PodeMover
+    m_ConditionEvent: CanMove
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8090613907041089139}

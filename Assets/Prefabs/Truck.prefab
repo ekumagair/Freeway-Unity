@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5736862296609843331}
   - component: {fileID: -875087585597041487}
   m_Layer: 0
-  m_Name: Caminhao
+  m_Name: Truck
   m_TagString: Vehicle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

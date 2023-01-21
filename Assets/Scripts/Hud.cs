@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Hud : MonoBehaviour
+public class HUD : MonoBehaviour
 {
-    public static bool iniciouJogo;
-    public static bool encerrouJogo = false;
-    public static int dificuldade = 1;
-    public Text pontos1_txt, pontos2_txt;
-    public static int pontos1, pontos2;
+    public static bool startedGame;
+    public static bool endedGame = false;
+    public static int difficulty = 1;
+    public Text points1_txt, points2_txt;
+    public static int score1, score2;
     public GameObject spawner;
     GameObject[] vehiclesDestroy;
 
@@ -18,20 +18,20 @@ public class Hud : MonoBehaviour
 
     void Start()
     {
-        iniciouJogo = false;
-        encerrouJogo = false;
-        pontos1 = 0;
-        pontos2 = 0;
+        startedGame = false;
+        endedGame = false;
+        score1 = 0;
+        score2 = 0;
         _as = GetComponent<AudioSource>();
-        CriarDemo();
+        CreateDemo();
     }
 
     void Update()
     {
-        if(iniciouJogo == true)
+        if(startedGame == true)
         {
-            pontos1_txt.text = pontos1.ToString();
-            pontos2_txt.text = pontos2.ToString();
+            points1_txt.text = score1.ToString();
+            points2_txt.text = score2.ToString();
 
             if(Input.GetButtonDown("Jump"))
             {
@@ -40,18 +40,18 @@ public class Hud : MonoBehaviour
         }
         else
         {
-            pontos1_txt.text = dificuldade.ToString();
-            pontos2_txt.text = "";
+            points1_txt.text = difficulty.ToString();
+            points2_txt.text = "";
 
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("Jump") || Input.GetButtonDown("Submit")) // INICIAR
             {
-                iniciouJogo = true;
-                spawner.GetComponent<Spawner>().IniciouJogo();
+                startedGame = true;
+                spawner.GetComponent<Spawner>().StartedGame();
 
-                StartCoroutine(TerminarJogo(136f));
-                StartCoroutine(TerminarJogoPiscar(128f));
+                StartCoroutine(FinishGame(136f));
+                StartCoroutine(FinishGameFlash(128f));
 
-                DestruirVeiculos();
+                DestroyVehicles();
             }
             if(Input.GetButtonDown("Horizontal"))
             {
@@ -59,26 +59,26 @@ public class Hud : MonoBehaviour
 
                 if (Input.GetAxisRaw("Horizontal") > 0.0f)
                 {
-                    dificuldade++;
+                    difficulty++;
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0.0f)
                 {
-                    dificuldade--;
+                    difficulty--;
                 }
 
-                CriarDemo();
+                CreateDemo();
             }
         }
 
-        if(dificuldade > 9)
+        if(difficulty > 9)
         {
-            dificuldade = 1;
-            CriarDemo();
+            difficulty = 1;
+            CreateDemo();
         }
-        if(dificuldade < 1)
+        if(difficulty < 1)
         {
-            dificuldade = 9;
-            CriarDemo();
+            difficulty = 9;
+            CreateDemo();
         }
 
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -87,7 +87,7 @@ public class Hud : MonoBehaviour
         }
     }
 
-    void DestruirVeiculos()
+    void DestroyVehicles()
     {
         vehiclesDestroy = GameObject.FindGameObjectsWithTag("Vehicle");
         foreach (GameObject v in vehiclesDestroy)
@@ -96,193 +96,199 @@ public class Hud : MonoBehaviour
         }
     }
 
-    IEnumerator TerminarJogo(float t)
+    IEnumerator FinishGame(float t)
     {
         yield return new WaitForSeconds(t);
-        encerrouJogo = true;
+        endedGame = true;
     }
 
-    IEnumerator TerminarJogoPiscar(float t)
+    IEnumerator FinishGameFlash(float t)
     {
         yield return new WaitForSeconds(t);
 
         for (int i = 0; i < 32; i++)
         {
-            pontos1_txt.enabled = !pontos1_txt.enabled;
-            pontos2_txt.enabled = !pontos2_txt.enabled;
+            points1_txt.enabled = !points1_txt.enabled;
+            points2_txt.enabled = !points2_txt.enabled;
             yield return new WaitForSeconds(0.25f);
         }
 
-        pontos1_txt.enabled = true;
-        pontos2_txt.enabled = true;
+        points1_txt.enabled = true;
+        points2_txt.enabled = true;
     }
 
-    void CriarDemo()
+    void CreateDemo()
     {
-        DestruirVeiculos();
-        if (dificuldade == 1)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, i, 8.8f);
-            }
-        }
-        if (dificuldade == 2)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, i, 8.8f);
-            }
+        DestroyVehicles();
 
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 3, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 6.5f);
-        }
-        if (dificuldade == 3)
+        switch (difficulty)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, i, 8.8f);
-            }
-
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 3, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 5, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 4.2f);
-        }
-        if (dificuldade == 4)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                if(i != 4)
+            case 1:
+                for (int i = 0; i < 10; i++)
                 {
-                    spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, i, 8.8f);
+                    spawner.GetComponent<Spawner>().CreateDemoVehicle(0, i, 8.8f);
                 }
-            }
+                break;
 
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 4, 9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 4.2f);
-        }
-        if (dificuldade == 5)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                if (i != 4)
+            case 2:
+                for (int i = 0; i < 10; i++)
                 {
-                    spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, i, 8.8f);
+                    spawner.GetComponent<Spawner>().CreateDemoVehicle(0, i, 8.8f);
                 }
-            }
 
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 4, 9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 7, -8.8f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 0, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 0, 4.2f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 4.2f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 1.9f);
-        }
-        if (dificuldade == 6)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, i, 8.8f);
-            }
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 3, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 6.5f);
+                break;
 
-            for (int x = 0; x < 10; x++)
-            {
-                spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, x, -8.8f);
-            }
-
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 3, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 6, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 9, 6.5f);
-        }
-        if (dificuldade == 7)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                if (i != 4 && i != 7)
+            case 3:
+                for (int i = 0; i < 10; i++)
                 {
-                    spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, i, 8.8f);
+                    spawner.GetComponent<Spawner>().CreateDemoVehicle(0, i, 8.8f);
                 }
-            }
 
-            for (int x = 0; x < 10; x++)
-            {
-                if (x != 4 && x != 7)
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 3, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 5, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 4.2f);
+                break;
+
+            case 4:
+                for (int i = 0; i < 10; i++)
                 {
-                    spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, x, -8.8f);
+                    if (i != 4)
+                    {
+                        spawner.GetComponent<Spawner>().CreateDemoVehicle(0, i, 8.8f);
+                    }
                 }
-            }
 
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 0, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 0, 4.2f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 3, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 4, 9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 6, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 7, 9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 4.2f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 1.9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 9, 6.5f);
-        }
-        if (dificuldade == 8)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                if (i != 4 && i != 7)
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 4, 9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 4.2f);
+                break;
+
+            case 5:
+                for (int i = 0; i < 10; i++)
                 {
-                    spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, i, 8.8f);
+                    if (i != 4)
+                    {
+                        spawner.GetComponent<Spawner>().CreateDemoVehicle(0, i, 8.8f);
+                    }
                 }
-            }
 
-            for (int x = 0; x < 10; x++)
-            {
-                if (x != 4 && x != 7)
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 4, 9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 7, -8.8f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 0, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 0, 4.2f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 4.2f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 1.9f);
+                break;
+
+            case 6:
+                for (int i = 0; i < 10; i++)
                 {
-                    spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, x, -8.8f);
+                    spawner.GetComponent<Spawner>().CreateDemoVehicle(0, i, 8.8f);
                 }
-            }
 
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 0, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 0, 4.2f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 2, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 3, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 4, 9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 4, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 6, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 7, 9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 7, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 4.2f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, 1.9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 8, -0.4f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(0, 9, 6.5f);
-        }
-        if (dificuldade == 9)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                if (i != 4 && i != 7)
+                for (int x = 0; x < 10; x++)
                 {
-                    spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, i, 8.8f);
+                    spawner.GetComponent<Spawner>().CreateDemoVehicle(0, x, -8.8f);
                 }
-            }
 
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 0, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 0, 4.2f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 2, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 3, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 4, 9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 4, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 6, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 7, 9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 7, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 8, 6.5f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 8, 4.2f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 8, 1.9f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 8, -0.4f);
-            spawner.GetComponent<Spawner>().CriarVeiculoDemo(1, 9, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 3, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 6, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 9, 6.5f);
+                break;
+
+            case 7:
+                for (int i = 0; i < 10; i++)
+                {
+                    if (i != 4 && i != 7)
+                    {
+                        spawner.GetComponent<Spawner>().CreateDemoVehicle(0, i, 8.8f);
+                    }
+                }
+
+                for (int x = 0; x < 10; x++)
+                {
+                    if (x != 4 && x != 7)
+                    {
+                        spawner.GetComponent<Spawner>().CreateDemoVehicle(0, x, -8.8f);
+                    }
+                }
+
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 0, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 0, 4.2f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 3, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 4, 9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 6, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 7, 9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 4.2f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 1.9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 9, 6.5f);
+                break;
+
+            case 8:
+                for (int i = 0; i < 10; i++)
+                {
+                    if (i != 4 && i != 7)
+                    {
+                        spawner.GetComponent<Spawner>().CreateDemoVehicle(0, i, 8.8f);
+                    }
+                }
+
+                for (int x = 0; x < 10; x++)
+                {
+                    if (x != 4 && x != 7)
+                    {
+                        spawner.GetComponent<Spawner>().CreateDemoVehicle(0, x, -8.8f);
+                    }
+                }
+
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 0, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 0, 4.2f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 2, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 3, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 4, 9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 4, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 6, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 7, 9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 7, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 4.2f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, 1.9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 8, -0.4f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(0, 9, 6.5f);
+                break;
+
+            case 9:
+                for (int i = 0; i < 10; i++)
+                {
+                    if (i != 4 && i != 7)
+                    {
+                        spawner.GetComponent<Spawner>().CreateDemoVehicle(1, i, 8.8f);
+                    }
+                }
+
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 0, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 0, 4.2f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 2, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 3, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 4, 9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 4, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 6, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 7, 9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 7, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 8, 6.5f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 8, 4.2f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 8, 1.9f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 8, -0.4f);
+                spawner.GetComponent<Spawner>().CreateDemoVehicle(1, 9, 6.5f);
+                break;
+
+            default:
+                break;
         }
     }
 }
