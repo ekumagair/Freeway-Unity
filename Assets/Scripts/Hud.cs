@@ -28,12 +28,12 @@ public class HUD : MonoBehaviour
 
     void Update()
     {
-        if(startedGame == true)
+        if (startedGame == true)
         {
             points1_txt.text = score1.ToString();
             points2_txt.text = score2.ToString();
 
-            if(Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Jump")) // Reset game.
             {
                 SceneManager.LoadScene("GameScene");
             }
@@ -43,7 +43,7 @@ public class HUD : MonoBehaviour
             points1_txt.text = difficulty.ToString();
             points2_txt.text = "";
 
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("Jump") || Input.GetButtonDown("Submit")) // INICIAR
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("Jump") || Input.GetButtonDown("Submit")) // Begin.
             {
                 startedGame = true;
                 spawner.GetComponent<Spawner>().StartedGame();
@@ -53,7 +53,7 @@ public class HUD : MonoBehaviour
 
                 DestroyVehicles();
             }
-            if(Input.GetButtonDown("Horizontal"))
+            if (Input.GetButtonDown("Horizontal"))
             {
                 _as.PlayOneShot(_as.clip);
 
@@ -70,18 +70,18 @@ public class HUD : MonoBehaviour
             }
         }
 
-        if(difficulty > 9)
+        if (difficulty > 9)
         {
             difficulty = 1;
             CreateDemo();
         }
-        if(difficulty < 1)
+        if (difficulty < 1)
         {
             difficulty = 9;
             CreateDemo();
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
@@ -96,13 +96,13 @@ public class HUD : MonoBehaviour
         }
     }
 
-    IEnumerator FinishGame(float t)
+    private IEnumerator FinishGame(float t)
     {
         yield return new WaitForSeconds(t);
         endedGame = true;
     }
 
-    IEnumerator FinishGameFlash(float t)
+    private IEnumerator FinishGameFlash(float t)
     {
         yield return new WaitForSeconds(t);
 

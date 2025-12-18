@@ -18,12 +18,12 @@ public class Vehicle : MonoBehaviour
         _as = GetComponent<AudioSource>();
         sr = GetComponent<SpriteRenderer>();
 
-        if(changeColor)
+        if (changeColor)
         {
             sr.color = Random.ColorHSV(0.0f, 1f, 0.25f, 1f, 0.75f, 1f);
         }
 
-        if(left == true)
+        if (left == true)
         {
             sr.flipX = true;
         }
@@ -62,7 +62,7 @@ public class Vehicle : MonoBehaviour
 
     void PlayEngineSound()
     {
-        if(Random.Range(0, 2) >= 1 && HUD.endedGame == false)
+        if (Random.Range(0, 2) >= 1 && HUD.endedGame == false)
         {
             _as.PlayDelayed(Random.Range(0f, 10f));
         }

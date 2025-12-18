@@ -213,14 +213,14 @@ public class Spawner : MonoBehaviour
         StartCoroutine(ChangeSpeed(10f));
     }
 
-    IEnumerator CreateVehicle(int v, int f, float speed, float delay)
+    private IEnumerator CreateVehicle(int v, int f, float speed, float delay)
     {
         yield return new WaitForSeconds(delay);
 
         float posX;
         bool left;
 
-        if(f <= 4)
+        if (f <= 4)
         {
             left = true;
         }
@@ -263,7 +263,7 @@ public class Spawner : MonoBehaviour
         spawned.GetComponent<Vehicle>().left = left;
     }
 
-    IEnumerator ChangeSpeed(float t)
+    private IEnumerator ChangeSpeed(float t)
     {
         int whichLane;
         GameObject[] allVehicles;
@@ -275,11 +275,11 @@ public class Spawner : MonoBehaviour
         newSpeed = Random.Range(0.6f, 1.4f);
         allVehicles = GameObject.FindGameObjectsWithTag("Vehicle");
 
-        Debug.Log("Changed speed. (Lane " + whichLane + " ; x" + newSpeed + ")");
+        //Debug.Log("Changed speed. (Lane " + whichLane + " ; x" + newSpeed + ")");
 
         foreach (GameObject vehicle in allVehicles)
         {
-            if(vehicle.GetComponent<Vehicle>().myLane == whichLane && vehicle != null)
+            if (vehicle.GetComponent<Vehicle>().myLane == whichLane && vehicle != null)
             {
                 vehicle.GetComponent<Vehicle>().speed *= newSpeed;
             }

@@ -7,7 +7,7 @@ public class Finish : MonoBehaviour
     public bool player1;
     public AudioSource _as;
 
-    private void Start()
+    void Start()
     {
         _as = GetComponent<AudioSource>();
     }
